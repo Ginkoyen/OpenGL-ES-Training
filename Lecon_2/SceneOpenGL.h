@@ -1,4 +1,9 @@
 #pragma once
+// Includes GLM
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+// Includes Autres
 #include <GL/glew.h>
 #include <SDL2/SDL.h>
 #include <iostream>
