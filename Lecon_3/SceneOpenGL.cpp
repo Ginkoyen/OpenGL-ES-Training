@@ -1,4 +1,5 @@
 #include "SceneOpenGL.h"
+#include "Forme/Cube.h"
 
 SceneOpenGL::SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre)
 {
@@ -78,6 +79,9 @@ bool SceneOpenGL::initGL()
         return false;
     }
 
+    //Activation du Depth Buffer
+    glEnable(GL_DEPTH_TEST);
+
     return true;
 }
 
@@ -85,69 +89,69 @@ bool SceneOpenGL::initGL()
 
 void SceneOpenGL::bouclePrincipale()
 {
+    // Booléen terminer
+    bool terminer(false);
+    unsigned int frameRate(1000/50);
+    Uint32 debutBoucle(0), finBoucle(0), tempsEcoule(0);
+
     // Matrices
     glm::mat4 projection;
     glm::mat4 modelview;
-
-    // Initialisation matrices
-    projection = glm::perspective(70.0, (double) m_largeurFenetre/m_hauteurFenetre, 1.0, 100.0);
+    projection = glm::perspective(70.0, (double) m_largeurFenetre / m_hauteurFenetre, 1.0, 100.0);
     modelview = glm::mat4(1.0);
 
-    // Variables
-    bool terminer(false);
-    float vertices[] = {0.0, 0.0, -1.0,  0.5, 0.0, -1.0,  0.0, 0.5, -1.0};
-    float couleurs[] = {240.0/255.0, 210.0/255.0, 23.0/255.0,   230.0/255.0, 0.0, 230.0/255.0,   0.0, 1.0, 0.0};
+    // Déclaration d'un objet Cube
+    Cube cube(2.0, "Shaders/Shaders/couleur3D.vert", "Shaders/Shaders/couleur3D.frag");
 
-    Shader shaderCouleur("Shaders/Shaders/couleur3D.vert", "Shaders/Shaders/couleur3D.frag");
-    shaderCouleur.charger();
+    // Variable angle
+    float angle(0.0);
 
     // Boucle principale
     while(!terminer)
     {
+        // On définit le temps de début de la boucle
+        debutBoucle = SDL_GetTicks();
+
+
         // Gestion des évènements
-        SDL_WaitEvent(&m_evenements);
+        SDL_PollEvent(&m_evenements);
 
         if(m_evenements.window.event == SDL_WINDOWEVENT_CLOSE)
             terminer = true;
 
+
         // Nettoyage de l'écran
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Réinitialisation de la matrice modelview
-        modelview = glm::lookAt(glm::vec3(1, 1, 1), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-        // Activation de l'écran
-        glUseProgram(shaderCouleur.getProgramID());
+        // Placement de la caméra
+        modelview = glm::lookAt(glm::vec3(3, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
 
-        // On remplie puis on active le tableau Vertex Attrib 0
-        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, vertices);
-        glEnableVertexAttribArray(0);
-        // On remplie puis on active le tableau Couleurs Attrib 1
-        glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, couleurs);
-        glEnableVertexAttribArray(1);
 
-        // Translation
-        //modelview = glm::translate(modelview, glm::vec3(0.4, 0.0, 0.0));
-        // Rotation
-        //modelview = glm::rotate(modelview, 60.0f, glm::vec3(0.0, 0.0, 1.0));
-        // Homothétie
-        //modelview = glm::scale(modelview, glm::vec3(1, -1, 1));
+        // Incrémentation de l'angle
+        angle += 4.0;
 
-        // On envoie les matrices au shader
-        glUniformMatrix4fv(glGetUniformLocation(shaderCouleur.getProgramID(), "modelview"), 1, GL_FALSE, glm::value_ptr(modelview));
-        glUniformMatrix4fv(glGetUniformLocation(shaderCouleur.getProgramID(), "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+        if(angle >= 360.0)
+           angle -= 360.0;
 
-        // On affiche le triangle
-        glDrawArrays(GL_TRIANGLES, 0, 3);
 
-        // On désactive les tableaux Vertex Attrib puisque l'on n'en a plus besoin
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(0);
+        // Rotation du repère
+        modelview = glm::rotate(modelview, angle, glm::vec3(0, 1, 0));
 
-        // Désactivation du shader
-        glUseProgram(0);
+
+        // Affichage du cube
+        cube.afficher(projection, modelview);
+
 
         // Actualisation de la fenêtre
         SDL_GL_SwapWindow(m_fenetre);
+
+        // Calcul du temps écoulé
+        finBoucle = SDL_GetTicks();
+        tempsEcoule = finBoucle - debutBoucle;
+
+        // Si nécessaire, on met en pause le programme
+        if(tempsEcoule < frameRate)
+            SDL_Delay(frameRate - tempsEcoule);
     }
 }
