@@ -1,8 +1,4 @@
 #include "SceneOpenGL.h"
-#include "Cube.h"
-#include "Input.h"
-#include "Texture.h"
-#include "Caisse.h"
 
 SceneOpenGL::SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre) : m_titreFenetre(titreFenetre), m_largeurFenetre(largeurFenetre),
                                                                                              m_hauteurFenetre(hauteurFenetre), m_fenetre(0), m_contexteOpenGL(0), m_input()
@@ -36,7 +32,7 @@ bool SceneOpenGL::initialiserFenetre()
     SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
     SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
 
-    // Création de la fenêtre
+    // Crï¿½ation de la fenï¿½tre
     m_fenetre = SDL_CreateWindow(m_titreFenetre.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, m_largeurFenetre, m_hauteurFenetre, SDL_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
 
     if(m_fenetre == 0)
@@ -47,7 +43,7 @@ bool SceneOpenGL::initialiserFenetre()
         return false;
     }
 
-    // Création du contexte OpenGL
+    // Crï¿½ation du contexte OpenGL
     m_contexteOpenGL = SDL_GL_CreateContext(m_fenetre);
 
     if(m_contexteOpenGL == 0)
@@ -67,10 +63,10 @@ bool SceneOpenGL::initGL()
     // On initialise GLEW
     GLenum initialisationGLEW( glewInit() );
 
-    // Si l'initialisation a échouée :
+    // Si l'initialisation a ï¿½chouï¿½e :
     if(initialisationGLEW != GLEW_OK)
     {
-        // On affiche l'erreur grâce à la fonction : glewGetErrorString(GLenum code)
+        // On affiche l'erreur grï¿½ce ï¿½ la fonction : glewGetErrorString(GLenum code)
         std::cout << "Erreur d'initialisation de GLEW : " << glewGetErrorString(initialisationGLEW) << std::endl;
 
         // On quitte la SDL
@@ -91,47 +87,26 @@ bool SceneOpenGL::initGL()
 
 void SceneOpenGL::bouclePrincipale()
 {
-    unsigned int frameRate(1000/50);
-    Uint32 debutBoucle(0), finBoucle(0), tempsEcoule(0);
-
     // Matrices
     glm::mat4 projection;
     glm::mat4 modelview;
     projection = glm::perspective(70.0, (double) m_largeurFenetre / m_hauteurFenetre, 1.0, 100.0);
     modelview = glm::mat4(1.0);
 
-    // Objet Caisse
-    Caisse caisse(2.0, "Include/Shaders/texture.vert", "Include/Shaders/texture.frag", "Textures/Caisse.jpg");
-
     // Boucle principale
     while(!m_input.terminer())
     {
-        // On définit le temps de début de la boucle
-        debutBoucle = SDL_GetTicks();
-
-        // Gestion des évènements
+        // Gestion des ï¿½vï¿½nements
         m_input.updateEvenements();
-
         if(m_input.getTouche(SDL_SCANCODE_ESCAPE))
             break;
 
-        // Nettoyage de l'écran
+        // Nettoyage de l'ï¿½cran
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Placement de la caméra
-        modelview = glm::lookAt(glm::vec3(2, 4, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+        // ...
 
-        caisse.afficher(projection, modelview);
-
-        // Actualisation de la fenêtre
+        // Actualisation de la fenï¿½tre
         SDL_GL_SwapWindow(m_fenetre);
-
-        // Calcul du temps écoulé
-        finBoucle = SDL_GetTicks();
-        tempsEcoule = finBoucle - debutBoucle;
-
-        // Si nécessaire, on met en pause le programme
-        if(tempsEcoule < frameRate)
-            SDL_Delay(frameRate - tempsEcoule);
     }
 }

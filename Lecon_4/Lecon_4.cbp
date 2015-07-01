@@ -17,6 +17,7 @@
 				<Linker>
 					<Add library="opengl32" />
 					<Add library="glew32" />
+					<Add library="SDL2_image" />
 				</Linker>
 			</Target>
 			<Target title="Release">
@@ -31,6 +32,7 @@
 					<Add option="-s" />
 					<Add library="opengl32" />
 					<Add library="glew32" />
+					<Add library="SDL2_image" />
 				</Linker>
 			</Target>
 		</Build>
@@ -45,6 +47,8 @@
 			<Add library="SDL2.dll" />
 			<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/SDL-2.0/lib" />
 		</Linker>
+		<Unit filename="Include/Caisse.cpp" />
+		<Unit filename="Include/Caisse.h" />
 		<Unit filename="Include/Cube.cpp" />
 		<Unit filename="Include/Cube.h" />
 		<Unit filename="Include/Input.cpp" />
@@ -53,6 +57,8 @@
 		<Unit filename="Include/SceneOpenGL.h" />
 		<Unit filename="Include/Shader.cpp" />
 		<Unit filename="Include/Shader.h" />
+		<Unit filename="Include/Texture.cpp" />
+		<Unit filename="Include/Texture.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

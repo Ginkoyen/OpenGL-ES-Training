@@ -17,7 +17,7 @@ class Cube
     Cube(float taille, std::string const vertexShader, std::string const fragmentShader);
     ~Cube();
     void afficher(glm::mat4 &projection, glm::mat4 &modelview);
-    private :
+    protected :
     Shader m_shader;
     float m_vertices[108];
     float m_couleurs[108];
