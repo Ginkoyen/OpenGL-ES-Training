@@ -1,11 +1,11 @@
 #include "SceneOpenGL.h"
-#include "Forme/Cube.h"
+#include "Cube.h"
+#include "Input.h"
 
-SceneOpenGL::SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre)
+SceneOpenGL::SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre) : m_titreFenetre(titreFenetre), m_largeurFenetre(largeurFenetre),
+                                                                                             m_hauteurFenetre(hauteurFenetre), m_fenetre(0), m_contexteOpenGL(0), m_input()
 {
-    m_titreFenetre = titreFenetre;
-    m_largeurFenetre = largeurFenetre;
-    m_hauteurFenetre = hauteurFenetre;
+
 }
 
 SceneOpenGL::~SceneOpenGL()
@@ -89,8 +89,6 @@ bool SceneOpenGL::initGL()
 
 void SceneOpenGL::bouclePrincipale()
 {
-    // Booléen terminer
-    bool terminer(false);
     unsigned int frameRate(1000/50);
     Uint32 debutBoucle(0), finBoucle(0), tempsEcoule(0);
 
@@ -101,23 +99,20 @@ void SceneOpenGL::bouclePrincipale()
     modelview = glm::mat4(1.0);
 
     // Déclaration d'un objet Cube
-    Cube cube(2.0, "Shaders/Shaders/couleur3D.vert", "Shaders/Shaders/couleur3D.frag");
+    Cube cube(2.0, "Shaders/couleur3D.vert", "Shaders/couleur3D.frag");
 
     // Variable angle
     float angle(0.0);
 
     // Boucle principale
-    while(!terminer)
+    while(!m_input.terminer())
     {
         // On définit le temps de début de la boucle
         debutBoucle = SDL_GetTicks();
 
 
         // Gestion des évènements
-        SDL_PollEvent(&m_evenements);
-
-        if(m_evenements.window.event == SDL_WINDOWEVENT_CLOSE)
-            terminer = true;
+        m_input.updateEvenements();
 
 
         // Nettoyage de l'écran

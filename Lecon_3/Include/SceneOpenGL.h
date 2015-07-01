@@ -8,7 +8,8 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <string>
-#include "Shaders/Shader.h"
+#include "Shader.h"
+#include "Input.h"
 
 class SceneOpenGL
 {
@@ -29,5 +30,5 @@ class SceneOpenGL
 
     SDL_Window* m_fenetre;
     SDL_GLContext m_contexteOpenGL;
-    SDL_Event m_evenements;
+    Input m_input;
 };

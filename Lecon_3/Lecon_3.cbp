@@ -45,12 +45,14 @@
 			<Add library="SDL2.dll" />
 			<Add directory="C:/Program Files (x86)/CodeBlocks/MinGW/SDL-2.0/lib" />
 		</Linker>
-		<Unit filename="Forme/Cube.cpp" />
-		<Unit filename="Forme/Cube.h" />
-		<Unit filename="SceneOpenGL.cpp" />
-		<Unit filename="SceneOpenGL.h" />
-		<Unit filename="Shaders/Shader.cpp" />
-		<Unit filename="Shaders/Shader.h" />
+		<Unit filename="Include/Cube.cpp" />
+		<Unit filename="Include/Cube.h" />
+		<Unit filename="Include/Input.cpp" />
+		<Unit filename="Include/Input.h" />
+		<Unit filename="Include/SceneOpenGL.cpp" />
+		<Unit filename="Include/SceneOpenGL.h" />
+		<Unit filename="Include/Shader.cpp" />
+		<Unit filename="Include/Shader.h" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
