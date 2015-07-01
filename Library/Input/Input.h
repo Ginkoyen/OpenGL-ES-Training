@@ -1,17 +1,28 @@
 #pragma once
-
-// Includes
+// Include
 #include <SDL2/SDL.h>
 
+// Classe
 class Input
 {
-    public :
+    public:
     Input();
     ~Input();
+
     void updateEvenements();
     bool terminer() const;
+    void afficherPointeur(bool reponse) const;
+    void capturerPointeur(bool reponse) const;
+    bool getTouche(const SDL_Scancode touche) const;
+    bool getBoutonSouris(const Uint8 bouton) const;
+    bool mouvementSouris() const;
 
-    private :
+    int getX() const;
+    int getY() const;
+    int getXRel() const;
+    int getYRel() const;
+
+    private:
     SDL_Event m_evenements;
     bool m_touches[SDL_NUM_SCANCODES];
     bool m_boutonsSouris[8];
