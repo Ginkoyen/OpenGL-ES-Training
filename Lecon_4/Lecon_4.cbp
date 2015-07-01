@@ -49,6 +49,8 @@
 		</Linker>
 		<Unit filename="Include/Caisse.cpp" />
 		<Unit filename="Include/Caisse.h" />
+		<Unit filename="Include/Camera.cpp" />
+		<Unit filename="Include/Camera.h" />
 		<Unit filename="Include/Cube.cpp" />
 		<Unit filename="Include/Cube.h" />
 		<Unit filename="Include/Input.cpp" />

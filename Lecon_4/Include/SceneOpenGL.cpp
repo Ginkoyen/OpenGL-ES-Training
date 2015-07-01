@@ -3,6 +3,7 @@
 #include "Input.h"
 #include "Texture.h"
 #include "Caisse.h"
+#include "Camera.h"
 
 SceneOpenGL::SceneOpenGL(std::string titreFenetre, int largeurFenetre, int hauteurFenetre) : m_titreFenetre(titreFenetre), m_largeurFenetre(largeurFenetre),
                                                                                              m_hauteurFenetre(hauteurFenetre), m_fenetre(0), m_contexteOpenGL(0), m_input()
@@ -100,6 +101,11 @@ void SceneOpenGL::bouclePrincipale()
     projection = glm::perspective(70.0, (double) m_largeurFenetre / m_hauteurFenetre, 1.0, 100.0);
     modelview = glm::mat4(1.0);
 
+    // Caméra mobile
+    Camera camera(glm::vec3(3, 3, 3), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0), 0.5, 0.5);
+    m_input.afficherPointeur(false);
+    m_input.capturerPointeur(true);
+
     // Objet Caisse
     Caisse caisse(2.0, "Include/Shaders/texture.vert", "Include/Shaders/texture.frag", "Textures/Caisse.jpg");
 
@@ -115,11 +121,13 @@ void SceneOpenGL::bouclePrincipale()
         if(m_input.getTouche(SDL_SCANCODE_ESCAPE))
             break;
 
+        camera.deplacer(m_input);
+
         // Nettoyage de l'écran
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // Placement de la caméra
-        modelview = glm::lookAt(glm::vec3(2, 4, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+        camera.lookAt(modelview);
 
         caisse.afficher(projection, modelview);
 
