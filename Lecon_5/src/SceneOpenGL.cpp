@@ -109,6 +109,22 @@ void SceneOpenGL::bouclePrincipale()
     m_input.afficherPointeur(false);
     m_input.capturerPointeur(true);
 
+    // Cabanne
+    Cabane cabane("Shaders/texture.vert", "Shaders/texture.frag");
+
+    // Sols
+    Sol solHerbeux(30.0, 30.0, 15, 15, "Shaders/texture.vert", "Shaders/texture.frag", "Textures/Herbe.jpg");
+    Sol solTerreux(10.0, 10.0, 5, 5, "Shaders/texture.vert", "Shaders/texture.frag", "Textures/Sol.jpg");
+
+    // Caisses
+    Caisse caisse(2.0, "Shaders/texture.vert", "Shaders/texture.frag", "Textures/Caisse2.jpg");
+    caisse.charger();
+    Caisse caisseDanger(2.0, "Shaders/texture.vert", "Shaders/texture.frag", "Textures/Caisse.jpg");
+    caisseDanger.charger();
+
+    // Cristal
+    Cristal cristal("Shaders/texture.vert", "Shaders/texture.frag", "Textures/Cristal.tga");
+    float angle(0.0);
 
     // Boucle principale
     while(!m_input.terminer())
@@ -133,6 +149,49 @@ void SceneOpenGL::bouclePrincipale()
 
         /* ***** Rendu ***** */
 
+        // Affichage de la cabane
+        cabane.afficher(projection, modelview);
+
+        // Affichage du sol terreux
+        solTerreux.afficher(projection, modelview);
+
+        // Affichage du sol herbeux
+        mat4 sauvegardeModelview = modelview;
+
+            modelview = translate(modelview, vec3(0, -0.01, 0));
+            solHerbeux.afficher(projection, modelview);
+
+        modelview = sauvegardeModelview;
+
+        // Sauvegarde de la matrice
+        sauvegardeModelview = modelview;
+
+            // Première caisse
+            modelview = translate(modelview, vec3(-2.5, 1, -3));
+            caisse.afficher(projection, modelview);
+
+            // Deuxième caisse
+            modelview = translate(modelview, vec3(5, 0, 1));
+            caisseDanger.afficher(projection, modelview);
+
+            // Troisième caisse
+            modelview = translate(modelview, vec3(-2.5, 0, 4));
+            caisse.afficher(projection, modelview);
+
+            // Rotation du cristal
+            angle++;
+
+            if(angle > 360)
+                angle -= 360;
+
+            // Affichage du cristal
+            modelview = translate(modelview, vec3(0, 2.1, 0));
+            modelview = rotate(modelview, angle, vec3(0, 1, 0));
+
+            cristal.afficher(projection, modelview);
+
+        // Restauration de la matrice
+        modelview = sauvegardeModelview;
 
         // Actualisation de la fenêtre
         SDL_GL_SwapWindow(m_fenetre);
